@@ -1,0 +1,387 @@
+<div class="top-bar">
+  <button (click)="logout()" class="btn-logout">
+    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+  </button>
+
+  <h1>Habit Tracker</h1>
+  
+  <button (click)="goToProfile()" class="btn-profile">
+    <i class="fas fa-user-circle"></i> Perfil
+  </button>
+</div>
+
+<div class="habit-wrapper">
+  <div class="card container">
+    <h2> Daily Habits</h2>
+    
+    <div *ngIf="dailyHabits.length > 0; else noData" >
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Cantidad</th>
+            <th>Completado</th>
+            <th class="icon-col"></th>
+            <th class="icon-col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let habit of dailyHabits">
+            <td class="habit-name-cell">
+              <div *ngIf="habitEditedId !== habit.id">
+                {{habit.habit_name}}
+              </div>
+              <div *ngIf="habitEditedId === habit.id">
+                <input [(ngModel)]="editedName" placeholder="Nombre" class="edit-input"/>
+              </div>
+            </td>
+            <td>
+              <div *ngIf="habitEditedId !== habit.id">
+                {{ habit.quantity }}
+              </div>
+              <div *ngIf="habitEditedId === habit.id">
+                <input type="number" [(ngModel)]="editedQuantity" placeholder="Cantidad" class="edit-input"/>
+              </div>
+            </td>
+            <td>
+              <label class="switch">
+                <input type="checkbox" [(ngModel)]="habit.done" (change)="toggleDailyDone(habit)">
+                <span class="slider round"></span>
+              </label>
+            </td>
+            <td class="edit-cell">
+              <ng-container *ngIf="habitEditedId !== habit.id; else editMode">
+                <button (click)="startEdit(habit)" class="icon-btn edit-btn">
+                  <i class="fas fa-edit"></i>
+                </button>
+              </ng-container>
+              <ng-template #editMode>
+                <button (click)="saveEdit(habit.id)" class="icon-btn save-btn">
+                  <i class="fas fa-check"></i>
+                </button>
+                <button (click)="cancelEdit()" class="icon-btn cancel-btn">
+                  <i class="fas fa-times"></i>
+                </button>
+              </ng-template>
+            </td>
+            <td>
+              <button (click)="deleteDailyHabit(habit.id)" class="icon-btn delete-btn">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <ng-template #noData>
+      <p>No tienes habitos</p>
+    </ng-template>
+
+
+    <button (click)="toggleDailyForm()" class="btn btn-primary">
+      <i class="fas fa-plus"></i>  Añadir Daily Habit
+    </button>
+    <div *ngIf="showDailyForm" class="form-wrapper">
+      <div class="form-fields">
+        <input 
+          type="text" 
+          [(ngModel)]="newDailyName" 
+          placeholder="Nombre del habito"
+        />
+        <input 
+          type="number" 
+          [(ngModel)]="newDailyQuantity" 
+          placeholder="Cantidad"
+        />
+      </div>
+        <button (click)="addDaily()" class="btn btn-primary full-width">
+          <i class="fas fa-plus-circle"></i>  Añadir hábito diario
+        </button>
+    </div>
+
+  </div>
+  
+  <div class="container" *ngIf="dailyHabits.length > 0 && daysInRange.length > 0">
+    <div class="range-selector">
+      <button
+        [ngClass]="{ active: selectedRange === 7 }"
+        (click)="changeRange(7)">
+        Semana
+      </button>
+      <button
+        [ngClass]="{ active: selectedRange === 15 }"
+        (click)="changeRange(15)">
+        Quincena
+      </button>
+      <button
+        [ngClass]="{ active: selectedRange === 30 }"
+        (click)="changeRange(30)">
+        Mes
+      </button>
+    </div>
+
+
+    <h2>Histograma de Hábitos (últimos {{ range }} días)</h2>
+    <div class="histogram-wrapper">
+      <table border="1" style="font-size: 14px;">
+        <thead>
+          <tr>
+            <th rowspan="2">Hábito</th>
+            <th *ngFor="let month of groupedMonths" [attr.colspan]="month.days">{{ month.label }}</th>
+          </tr>
+          <tr>
+            <th *ngFor="let day of daysInRange">{{ day | date:'dd' }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let habit of dailyHabits">
+            <td>{{ habit.habit_name }}</td>
+            <td *ngFor="let day of daysInRange"
+                [ngClass]="{
+                  'done': getDailyDayStatus(habit, day) === 'done',
+                  'not-done': getDailyDayStatus(habit, day) === 'not-done',
+                  'not-exist': getDailyDayStatus(habit, day) === 'not-exist'
+                }"
+              >
+                <ng-container [ngSwitch]="getDailyDayStatus(habit, day)">
+                  <i *ngSwitchCase="'done'" class="fas fa-check-circle icon"></i>
+                  <i *ngSwitchCase="'not-done'" class="fas fa-times-circle icon"></i>
+                  <i *ngSwitchCase="'not-exist'" class="fas fa-minus-circle icon"></i>
+                </ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+
+
+
+  </div>
+
+
+  <div class="chart-card">
+      <canvas 
+        baseChart 
+        [data]="doughnutChartData" 
+        [options]="doughnutChartOptions"
+        [plugins]="[centerTextPlugin]"
+        [type]="'doughnut'">
+      </canvas>
+
+      <p class="motivational-message">
+        {{ getMotivationalMessage() }}
+      </p>
+  </div>
+    
+
+<div class="container">
+  <h2>Weekly Habits</h2>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Habito</th>
+        <th>Cantidad</th>
+        <th>Completado</th>
+        <th>Historial</th>
+        <th class="icon-col"></th>
+        <th class="icon-col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let habit of weeklyHabits">
+        <td>
+          <div *ngIf="weeklyHabitEditedId !== habit.id">
+            {{ habit.habit_name }}
+          </div>
+          <div *ngIf="weeklyHabitEditedId === habit.id">
+            <input [(ngModel)]="editedWeeklyName" placeholder="Nombre" class="edit-input" />
+          </div>
+        </td>
+
+        <td>
+          <div *ngIf="weeklyHabitEditedId !== habit.id">
+            {{ habit.quantity }}
+          </div>
+          <div *ngIf="weeklyHabitEditedId === habit.id">
+            <input type="number" [(ngModel)]="editedWeeklyQuantity" class="edit-input" />
+          </div>
+        </td>
+        
+
+        <td>
+          <label class="switch">
+            <input type="checkbox"
+                  [checked]="isWeeklyDone(habit)"
+                  (change)="toggleWeeklyDone(habit)">
+            <span class="slider round"></span>
+          </label>
+        </td>
+  
+        <td class="weekly-icons">
+          <span *ngFor="let week of weekHistory">
+            <ng-container [ngSwitch]="getHistoryStatus(habit, week)">
+              <i *ngSwitchCase="'done'" class="fas fa-check-circle icon done"></i>
+              <i *ngSwitchCase="'not-done'" class="fas fa-times-circle icon not-done"></i>
+              <i *ngSwitchCase="'not-exist'" class="fas fa-minus-circle icon not-exist"></i>
+            </ng-container>
+          </span>
+        </td>
+
+        <td>
+          <ng-container *ngIf="weeklyHabitEditedId !== habit.id; else editMode">
+            <button (click)="startEditWeekly(habit)" class="icon-btn edit-btn">
+              <i class="fas fa-edit"></i>
+            </button>
+          </ng-container>
+          <ng-template #editMode>
+            <button (click)="saveEditWeekly(habit.id)" class="icon-btn save-btn">
+              <i class="fas fa-check"></i>
+            </button>
+            <button (click)="cancelEditWeekly()" class="icon-btn cancel-btn">
+              <i class="fas fa-times"></i>
+            </button>
+          </ng-template>
+        </td>
+        
+        <td>
+          <button (click)="deleteWeeklyHabit(habit.id)" class="icon-btn delete-btn">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button (click)="toggleWeeklyForm()" class="btn btn-primary">
+    <i class="fas fa-plus"></i>  Añadir Weekly Habit
+  </button>
+
+  <div *ngIf="showWeeklyForm" class="form-wrapper">
+    <div class="form-fields">
+      <p>Nuevo Habito</p>
+      <input
+        type="text"
+        [(ngModel)]="newWeeklyName"
+        placeholder="Nombre del hábito semanal"
+        class="input"
+      />
+      <input
+        type="number"
+        [(ngModel)]="newWeeklyQuantity"
+        placeholder="Cantidad"
+        class="input"
+      />
+    </div>
+    <button (click)="addWeeklyHabit()" class="btn btn-primary full-width">
+      <i class="fas fa-plus-circle"></i>  Crear hábito semanal
+    </button>
+  </div>
+
+
+  <div class="weekly-chart" *ngIf="hasLineChartData()">
+    <h3>📈 Hábitos Semanales Completados</h3>
+    <canvas 
+      baseChart
+      [data]="lineChartData"
+      [options]="lineChartOptions"
+      [type]="'line'">
+    </canvas>
+  </div>
+
+
+
+</div>
+
+
+
+  <div class="container">
+    <h2>Hábitos Mensuales</h2>
+
+    <button (click)="toggleMonthlyForm()" class="btn btn-primary">
+      <i class="fas fa-plus"></i>   Añadir Monthly Habit
+    </button>
+    
+    <div *ngIf="showMonthlyForm" class="form-wrapper">
+      <div class="form-fields">
+        <p>Nuevo Habito</p>
+        <input 
+          type="text"
+          [(ngModel)]="newMonthlyName" 
+          placeholder="Nombre del hábito" 
+          class="input"
+        />
+        <input 
+          type="number" 
+          [(ngModel)]="newMonthlyQuantity" 
+          min="1" 
+          placeholder="Cantidad" 
+          class="input"
+        />
+      </div>
+      <button (click)="addMonthlyHabit()" class="btn btn-primary full-width">
+        <i class="fas fa-plus-circle"></i>  Crear habito mensual
+      </button>
+    </div>
+    
+    <div class="monthly-habit-grid">
+      <div class="monthly-card" *ngFor="let habit of monthlyHabits">
+        
+          <ng-container *ngIf="monthlyHabitEditedId !== habit.id; else editActions">
+            <button class="corner-btn left edit-btn" (click)="startEditMonthly(habit)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="corner-btn right delete-btn" (click)="deleteMonthlyHabit(habit.id)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </ng-container>
+        
+          <ng-template #editActions>
+            <button class="corner-btn left save-btn" (click)="saveEditMonthly(habit.id)">
+              <i class="fas fa-check"></i>
+            </button>
+            <button class="corner-btn right cancel-btn" (click)="cancelEditMonthly()">
+              <i class="fas fa-times"></i>
+            </button>
+          </ng-template>
+        
+    
+        <div *ngIf="monthlyHabitEditedId !== habit.id">
+          <h4>{{ habit.habit_name }}</h4>
+          <p>Cantidad: {{ habit.quantity }}</p>
+        </div>
+        
+        <div *ngIf="monthlyHabitEditedId === habit.id" class="form-fields">
+          <input [(ngModel)]="editedMonthlyName" placeholder="Nombre" class="input" />
+          <input type="number" [(ngModel)]="editedMonthlyQuantity" placeholder="Cantidad" class="input" />
+        </div>
+    
+        <div [ngClass]="{
+          'estado-completado': isMonthlyDone(habit),
+          'estado-pendiente': !isMonthlyDone(habit)
+        }">
+        <label class="switch">
+          <input type="checkbox"
+                [checked]="isMonthlyDone(habit)"
+                (change)="toggleMonthlyDone(habit)">
+          <span class="slider round"></span>
+        </label>
+          {{ isMonthlyDone(habit) ? 'Completado' : 'Pendiente' }}
+        </div>
+        
+      </div>
+
+    </div>
+      <div class="monthly-chart">
+        <h3 class="chart-title">Historial mensual de hábitos</h3>
+        <canvas baseChart
+                [data]="barChartData"
+                [options]="barChartOptions"
+                [type]="'bar'">
+        </canvas>
+      </div>
+    
+  </div>

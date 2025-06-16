@@ -1,0 +1,44 @@
+<button class="back-btn" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Volver
+</button>
+
+<h1 class="admin-title">Panel de Administrador</h1>
+
+<div *ngIf="adminStats" class="admin-card">
+    <h2>📊 Estadísticas generales</h2>
+    <ul>
+      <li><strong>Usuarios registrados:</strong> {{ adminStats!.totalUsers }}</li>
+      <li><strong>Hábitos diarios:</strong> {{ adminStats!.totalHabits.daily }}</li>
+      <li><strong>Hábitos semanales:</strong> {{ adminStats!.totalHabits.weekly }}</li>
+      <li><strong>Hábitos mensuales:</strong> {{ adminStats!.totalHabits.monthly }}</li>
+      <li><strong>Promedio diarios por usuario:</strong> {{ adminStats!.avgDailyPerUser }}</li>
+      <li><strong>Promedio semanales por usuario:</strong> {{ adminStats!.avgWeeklyPerUser }}</li>
+      <li><strong>Promedio mensuales por usuario:</strong> {{ adminStats!.avgMonthlyPerUser }}</li>
+    </ul>
+</div>
+
+<button (click)="toggleShowUsers()" class="btn btn-primary">
+  {{ showUsers ? 'Ocultar usuarios' : 'Ver lista de usuarios' }}
+</button>
+
+<div *ngIf="showUsers" class="user-table">
+  <h2>Usuarios registrados</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Email</th>
+        <th>Rol</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,86 @@
+
+<button class="back-btn" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Volver
+</button>
+
+<button *ngIf="user()?.role === 'admin'" class="admin-btn" (click)="goToAdminDashboard()">
+  Ir a Panel de Administrador
+</button>
+
+
+
+
+
+@if (error()) {
+  <p class="error">{{ error() }}</p>
+} @else {
+  @if (user()) {
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="center">
+          <h1><i class="fas fa-user-circle"></i> Perfil</h1>
+        </div>
+      </div>
+      <div class="profile-info">
+        <div class="item">
+          <i class="fas fa-id-card"></i>
+          <span class="label">ID:</span> {{ user()?.id }}
+        </div>
+        <div class="item">
+          <i class="fas fa-user"></i>
+          <span class="label">Nombre:</span> {{ user()?.username }}
+        </div>
+        <div class="item">
+          <i class="fas fa-envelope"></i>
+          <span class="label">Email:</span> {{ user()?.email }}
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="change" (click)="changePassword()">🔐 Cambiar contraseña</button>
+        <button class="logout" (click)="logout()">🚪 Cerrar sesión</button>
+        <button class="delete" (click)="deleteAccount()">🗑️ Eliminar cuenta</button>
+      </div>
+    </div>
+
+
+    <div class="logros-card">
+      <h2>🏆 Logros</h2>
+      <div class="logros-grid">
+        <div class="logro-item daily">
+          <i class="fas fa-calendar-day logro-icon"></i>
+          <span class="logro-label">Diarios</span>
+          <span class="logro-count">{{ doneCount.daily }}</span>
+        </div>
+        <div class="logro-item weekly">
+          <i class="fas fa-calendar-week logro-icon"></i>
+          <span class="logro-label">Semanales</span>
+          <span class="logro-count">{{ doneCount.weekly }}</span>
+        </div>
+        <div class="logro-item monthly">
+          <i class="fas fa-calendar-alt logro-icon"></i>
+          <span class="logro-label">Mensuales</span>
+          <span class="logro-count">{{ doneCount.monthly }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="month-stats">
+      <div *ngIf="chartData.datasets.length > 2">
+        <div class="chart-section">
+          <h3>📊 Completados por mes</h3>
+          <canvas baseChart
+            [data]="chartData"
+            [options]="chartOptions"
+            [type]="'line'">
+          </canvas>
+        </div>
+      </div>
+    </div>
+
+
+
+  } @else {
+    <p>Cargando perfil...</p>
+  }
+}

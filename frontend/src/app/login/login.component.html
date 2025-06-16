@@ -1,0 +1,32 @@
+<button class="register-top-btn" (click)="goToRegister()">Registrarse</button>
+
+<h1 class="login-title">HABITIVITY</h1>
+
+<div class="login-container">
+    <h2>Iniciar Sesión</h2>
+    <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+        <input 
+            type="text" 
+            placeholder="Nombre de Usuario" 
+            [(ngModel)]="username" 
+            name="username" 
+            required
+        />
+        <input 
+            type="password" 
+            placeholder="Contraseña" 
+            [(ngModel)]="password" 
+            name="password" 
+            required
+        />
+        <button type="submit" [disabled]="!loginForm.valid">Login</button>
+        <p *ngIf="errorMessage" style="color:red;">{{ errorMessage }}</p>
+
+        <div class="register-link">
+            ¿No tienes una cuenta? 
+            <button type="button" (click)="goToRegister()" class="register-btn">
+                Regístrate aquí
+            </button>
+        </div>
+    </form>
+</div>

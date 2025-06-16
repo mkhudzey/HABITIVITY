@@ -1,0 +1,187 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+  --primary: #3498db;
+  --secondary: #2ecc71;
+  --danger: #e74c3c;
+  --warning: #f1c40f;
+  --background: #f4f6f8;
+  --text-color: #2c3e50;
+  --radius: 12px;
+  --shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  --font: 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.6;
+  background-color:  #EFFAFD;
+}
+h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+h2 {
+  font-size: 1.9rem;
+  font-weight: 630;
+  text-align: center;
+}
+h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* COMPONENTES*/
+
+.card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.btn {
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  padding: 15px 25px;
+  font-size: 1rem;
+  border-radius: 5px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+  display: block;
+  margin: 2rem auto 1rem auto;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #27ae60;
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+}
+
+.input {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
+  width: 100%;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.table th, .table td {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  font-weight: 600;
+}
+
+.form-wrapper {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.form-wrapper .input {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.form-wrapper .btn {
+  width: 100%;
+}
+
+.action-btn i {
+  font-size: 1.2rem;
+  margin: 0 6px;
+  cursor: pointer;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('./assets/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+}
+
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 50px;
+    padding: 15px 25px;
+    font-size: 1rem;
+    border-radius: 5px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 5;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+    background-color: #1976D2;
+}

@@ -1,0 +1,51 @@
+.admin-card {
+  background-color: #ffffff;
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.admin-card h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-card ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-card li {
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.admin-title{
+    text-align: center;
+    font-size: 4.2rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    color: rgb(0, 0, 0);
+    z-index: 2;
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.user-table {
+  margin: 2rem auto;
+  padding: 0 2.5rem 1.5rem;
+  max-width: 90vw;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  
+}
+

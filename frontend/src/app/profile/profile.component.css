@@ -1,0 +1,247 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+h2 {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+  
+.profile-card {
+    width: 100%;
+    max-width: 400px;
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+  
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: left;
+    margin-bottom: 2rem;
+    font-size: 16px;
+    color: #444;
+}
+  
+.profile-info .item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.profile-info .item i {
+    color: #777;
+    font-size: 1.1rem;
+}
+ 
+.profile-info .item span.label {
+    font-weight: 600;
+    width: 70px;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+  
+button {
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+  
+button.change {
+    background-color: #3498db;
+    color: #fff;
+}
+  
+button.logout {
+    background-color: #ff5900;
+    color: #fff;
+}
+  
+button.delete {
+    background-color: #f1311c;
+    color: #fff;
+}
+  
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+  
+.error {
+    color: red;
+    font-size: 0.95rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.habit-summary {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.habit-summary h2 {
+    margin-bottom: 1rem;
+}
+.habit-summary ul {
+    list-style: none;
+    padding: 0;
+}
+.habit-summary li {
+    margin: 0.5rem 0;
+    font-size: 16px;
+}
+
+.logros-card {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: auto;
+    height: auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    
+}
+  
+.logros-grid {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.5rem;
+}
+  
+.logro-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #f6f8fc;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    width: 90px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+}
+
+.logro-item:hover {
+    transform: scale(1.05);
+}
+
+.logro-icon {
+    font-size: 24px;
+    margin-bottom: 0.5rem;
+}
+  
+.logro-label {
+    font-weight: 600;
+    color: #333;
+}
+  
+.logro-count {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2d3436;
+    margin-top: 0.25rem;
+}
+  
+.logro-item.daily { border-top: 4px solid #3498db; }
+.logro-item.weekly { border-top: 4px solid #27ae60; }
+.logro-item.monthly { border-top: 4px solid #9b59b6; }
+
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+    position: relative;
+}
+
+.profile-header .left,
+.profile-header .right {
+    width: 80px;
+}
+
+.profile-header .center {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.profile-header h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2d3436;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    justify-content: center;
+}
+
+.admin-btn {
+    position: absolute;
+    top: 20px;
+    right: 50px;
+    padding: 15px 25px;
+    font-size: 1rem;
+    border-radius: 5px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 5;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+    }
+  
+.admin-btn:hover {
+    background-color: #1976D2;
+}
+
+.month-stats {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 800px;
+  width: 100%;
+  margin: 2rem auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.month-stats h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  font-family: 'Poppins', sans-serif;
+}
+
+.chart-section {
+  height: 500px;
+  width: 100%;
+  position: relative;
+  padding-bottom: 2rem;
+  overflow: visible;
+}

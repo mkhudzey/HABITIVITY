@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>⚠️ ¿Estás seguro?</h1>
+<mat-dialog-content>
+  <p>Esta acción eliminará tu cuenta permanentemente.</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="warn" (click)="onConfirm()">Eliminar</button>
+</mat-dialog-actions>
+
