@@ -30,15 +30,60 @@
         <th>Usuario</th>
         <th>Email</th>
         <th>Rol</th>
+        <th class="icon-col"></th>
+        <th class="icon-col"></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let user of users">
-        <td>{{ user.id }}</td>
-        <td>{{ user.username }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.role }}</td>
-      </tr>
+  <td>{{ user.id }}</td>
+
+  <td>
+    <div *ngIf="editedUserId !== user.id">
+      {{ user.username }}
+    </div>
+    <div *ngIf="editedUserId === user.id">
+      <input [(ngModel)]="editedUsername" placeholder="Usuario" class="edit-input" />
+    </div>
+  </td>
+
+  <td>
+    <div *ngIf="editedUserId !== user.id">
+      {{ user.email }}
+    </div>
+    <div *ngIf="editedUserId === user.id">
+      <input [(ngModel)]="editedEmail" placeholder="Correo" class="edit-input" />
+    </div>
+  </td>
+
+  <td>{{ user.role }}</td>
+
+  <td>
+    <ng-container *ngIf="editedUserId !== user.id && user.role !== 'admin'; else editMode">
+      <button (click)="startEditUser(user)" class="icon-btn edit-btn">
+        <i class="fas fa-edit"></i>
+      </button>
+    </ng-container>
+    <ng-template #editMode>
+      <ng-container *ngIf="editedUserId === user.id && user.role !== 'admin'">
+        <button (click)="saveEditUser(user.id)" class="icon-btn save-btn">
+          <i class="fas fa-check"></i>
+        </button>
+        <button (click)="cancelEditUser()" class="icon-btn cancel-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </ng-container>
+    </ng-template>
+
+  </td>
+
+  <td>
+    <button *ngIf="user.role !== 'admin'" (click)="deleteUser(user.id)" class="icon-btn delete-btn">
+      <i class="fas fa-trash"></i>
+    </button>
+  </td>
+</tr>
+
     </tbody>
   </table>
 </div>

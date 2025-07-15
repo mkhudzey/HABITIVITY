@@ -55,5 +55,30 @@ router.get('/users', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los usuarios'});
   }
 });
+
+router.patch('/updateUser/:id', async(req, res) => {
+  const {id} = req.params;
+  const { username, email } = req.body;
+
+  if (!username || !email) {
+    return res.status(400).json({ error: 'Faltan datos'});
+  }
+
+  try{
+    const result = await pool.query(
+       `UPDATE users SET username = $1, email = $2 WHERE id= $3 AND role!= 'admin' RETURNING id, username, email, role`,
+       [username, email, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'User no encontrado o es admin'});
+    }
+
+    res.status(200).json(result.rows);
+
+  } catch (error) {
+    res.status(500).json({error: 'Error al modificar el usuario'})
+  }
+})
   
 module.exports = router;

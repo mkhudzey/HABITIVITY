@@ -269,4 +269,13 @@ export class AuthService {
     return this.http.get<any[]>(`${this.apiAdmin}/users`);
   }
 
+  updateUser(user: { id: number, username: string, email: string }): Observable<any>{
+    return this.http.patch(`${this.apiAdmin}/updateUser/${user.id}`,
+      {
+        username: user.username,
+        email: user.email
+      }
+    );
+  }
+
 }
