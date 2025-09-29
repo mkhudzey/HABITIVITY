@@ -5,6 +5,30 @@ const verifyToken = require('../middlewares/verifyToken');
 
 router.use(verifyToken);
 
+function monthStrToDate(ym) {
+  const [y, m] = ym.split('-').map(Number);
+  return new Date(y, m - 1, 1);
+}
+function dateToMonthStr(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  return `${y}-${m}`;
+}
+function fillMonthRange(sortedLabels) {
+  if (!sortedLabels.length) return [];
+  const start = monthStrToDate(sortedLabels[0]);
+  const end   = monthStrToDate(sortedLabels[sortedLabels.length - 1]);
+
+  const out = [];
+  const cur = new Date(start);
+  while (cur <= end) {
+    out.push(dateToMonthStr(cur));
+    cur.setMonth(cur.getMonth() + 1, 1);
+  }
+  return out;
+}
+
+
 router.get('/completed-logs/:userId', async (req, res) => {
     const userId = req.params.userId;
 
@@ -46,6 +70,15 @@ router.get('/completed-logs/:userId', async (req, res) => {
 
         const sortedMonths = Array.from(monthSet).sort();
 
+        const now = new Date();
+        const currentMonth = dateToMonthStr(new Date(now.getFullYear(), now.getMonth(), 1));
+
+        const expanded = (sortedMonths.length && sortedMonths[sortedMonths.length - 1] < currentMonth)
+        ? [...sortedMonths, currentMonth]
+        : sortedMonths;
+
+        const labels = fillMonthRange(expanded);
+
         const toMap = (rows) => {
             const map = {}
             rows.forEach(row => map[row.month] = parseInt(row.total));
@@ -57,10 +90,10 @@ router.get('/completed-logs/:userId', async (req, res) => {
         const monthlyMap = toMap(monthlyRes.rows);
 
         const response = {
-            labels: sortedMonths,
-            daily: sortedMonths.map(m => dailyMap[m] || 0),
-            weekly: sortedMonths.map(m => weeklyMap[m] || 0),
-            monthly: sortedMonths.map(m => monthlyMap[m] || 0)
+            labels,
+            daily: labels.map(m => dailyMap[m] || 0),
+            weekly: labels.map(m => weeklyMap[m] || 0),
+            monthly: labels.map(m => monthlyMap[m] || 0)
         };
 
         res.json(response);
